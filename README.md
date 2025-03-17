@@ -6,6 +6,7 @@ Demo client for ASANA. Client fetching the data from ASANA by Access Token and s
 
 - Test with retry response from ASANA
 - Add error mapping from asana (not just throwing)
+- Add linter
 
 ## Install
 
