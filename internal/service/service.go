@@ -146,8 +146,8 @@ func handleError(err error) {
 func defineTickerDuration(mode ExtractorMode) time.Duration {
 	switch mode {
 	case ExtractorModeFiveMinutes:
-		return 5 * time.Millisecond
+		return 5 * time.Minute
 	default:
-		return 30 * time.Millisecond
+		return 30 * time.Second
 	}
 }
