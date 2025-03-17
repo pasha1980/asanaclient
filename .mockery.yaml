@@ -1,0 +1,13 @@
+# Parameters doc: https://vektra.github.io/mockery/latest/configuration/#parameter-descriptions
+disable-version-string: True
+with-expecter: True
+outpkg: mocks
+dir: mocks
+filename: "{{.PackageName}}_{{.InterfaceName | snakecase }}.go"
+mockname: "{{.PackageName | camelcase }}{{.InterfaceName | camelcase }}"
+issue-845-fix: True
+packages:
+  github.com/pasha1980/asanaclient/internal/service:
+    interfaces:
+      AsanaClient:
+      Storage:
