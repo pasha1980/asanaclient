@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/pasha1980/asanaclient/config"
 	"log/slog"
+	"sync"
 	"time"
 )
 
@@ -35,17 +36,28 @@ func Extract(ctx context.Context, client AsanaClient, storage Storage) error {
 		return err
 	}
 
+	wg := sync.WaitGroup{}
 	for i := range workspaces {
-		err = extractUsers(ctx, client, storage, workspaces[i].GID)
-		if err != nil {
-			return err
-		}
+		wg.Add(2)
 
-		err = extractProjects(ctx, client, storage, workspaces[i].GID)
-		if err != nil {
-			return err
-		}
+		go func() {
+			err = extractUsers(ctx, client, storage, workspaces[i].GID)
+			if err != nil {
+				handleError(err)
+			}
+			wg.Done()
+		}()
+
+		go func() {
+			err = extractProjects(ctx, client, storage, workspaces[i].GID)
+			if err != nil {
+				handleError(err)
+			}
+			wg.Done()
+		}()
 	}
+
+	wg.Wait()
 	return nil
 }
 
@@ -134,8 +146,8 @@ func handleError(err error) {
 func defineTickerDuration(mode ExtractorMode) time.Duration {
 	switch mode {
 	case ExtractorModeFiveMinutes:
-		return 5 * time.Minute
+		return 5 * time.Millisecond
 	default:
-		return 30 * time.Second
+		return 30 * time.Millisecond
 	}
 }

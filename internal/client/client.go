@@ -2,9 +2,11 @@ package client
 
 import (
 	"context"
+	"errors"
 	"github.com/go-resty/resty/v2"
 	"github.com/pasha1980/asanaclient/config"
 	"github.com/pasha1980/asanaclient/internal/service"
+	"net/http"
 	"strconv"
 )
 
@@ -27,6 +29,10 @@ func (c *asanaClient) FetchUsers(ctx context.Context, input service.FetchInput) 
 	resp, err := req.Get("/users")
 	if err != nil {
 		return result, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return result, errors.New(string(resp.Body()))
 	}
 
 	parsedResp := resp.Result().(*BaseAsanaResponse[service.User])
@@ -54,6 +60,10 @@ func (c *asanaClient) FetchProjects(ctx context.Context, input service.FetchInpu
 		return result, err
 	}
 
+	if resp.StatusCode() != http.StatusOK {
+		return result, errors.New(string(resp.Body()))
+	}
+
 	parsedResp := resp.Result().(*BaseAsanaResponse[service.Project])
 	if parsedResp.NextPage != nil {
 		result.NextOffset = parsedResp.NextPage.Offset
@@ -69,6 +79,10 @@ func (c *asanaClient) FetchWorkspaces(ctx context.Context) ([]service.Workspace,
 	resp, err := req.Get("/workspaces")
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, errors.New(string(resp.Body()))
 	}
 
 	parsedResp := resp.Result().(*BaseAsanaResponse[service.Workspace])

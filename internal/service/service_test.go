@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestExtractWhenEmptyWorkspaces(t *testing.T) {
+func TestExtract_whenEmptyWorkspaces(t *testing.T) {
 	asanaClient := mocks.NewServiceAsanaClient(t)
 	asanaClient.EXPECT().FetchWorkspaces(mock.Anything).Return([]service.Workspace{}, nil)
 
@@ -22,7 +22,7 @@ func TestExtractWhenEmptyWorkspaces(t *testing.T) {
 	storage.AssertNotCalled(t, "Save", mock.Anything, mock.Anything, mock.Anything)
 }
 
-func TestExtractWhenEmptyUsersAndProjects(t *testing.T) {
+func TestExtract_whenEmptyUsersAndProjects(t *testing.T) {
 	asanaClient := mocks.NewServiceAsanaClient(t)
 	asanaClient.EXPECT().FetchWorkspaces(mock.Anything).Return([]service.Workspace{
 		{
@@ -51,7 +51,7 @@ func TestExtractWhenEmptyUsersAndProjects(t *testing.T) {
 	storage.AssertNotCalled(t, "Save", mock.Anything, mock.Anything, mock.Anything)
 }
 
-func TestExtractWhenOnePage(t *testing.T) {
+func TestExtract_whenOnePage(t *testing.T) {
 	asanaClient := mocks.NewServiceAsanaClient(t)
 	asanaClient.EXPECT().FetchWorkspaces(mock.Anything).Return([]service.Workspace{
 		{"1", "1"},
@@ -88,7 +88,7 @@ func TestExtractWhenOnePage(t *testing.T) {
 	storage.AssertCalled(t, "Save", mock.Anything, "project.2", mock.Anything)
 }
 
-func TestExtractWhenTwoPages(t *testing.T) {
+func TestExtract_whenTwoPages(t *testing.T) {
 	offset := "secondPage"
 
 	asanaClient := mocks.NewServiceAsanaClient(t)

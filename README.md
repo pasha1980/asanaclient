@@ -2,6 +2,11 @@
 
 Demo client for ASANA. Client fetching the data from ASANA by Access Token and saving as json
 
+## Todo
+
+- Test with retry response from ASANA
+- Add error mapping from asana (not just throwing)
+
 ## Install
 
 1. Install
